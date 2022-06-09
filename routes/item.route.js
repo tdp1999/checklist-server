@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 			return;
 		}
 
-		if (req.query._page && req.query._limit) {
+		if (req.query._page) {
 			let _page = req.query._page || 1;
 			let _limit = req.query._limit || 10;
 			let _sort = req.query._sort || 'createdAt';

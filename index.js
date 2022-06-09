@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const categoryRoute = require('./routes/category.route');
 const itemRoute = require('./routes/item.route');
+const cors = require('cors');
+const timeout = require('connect-timeout');
 require('dotenv').config();
 
 // Constant variables:
@@ -19,6 +21,8 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTo
 
 // Middleware
 app.use(express.json());
+app.use(cors());
+app.use(timeout('10s'));
 
 // Routes
 app.use('/api/category', categoryRoute);
