@@ -12,6 +12,7 @@ const findAndUpdate = async (req, res) => {
 };
 
 // Get all categories with / without paginations
+// Get a category by slug
 router.get('/', async (req, res) => {
 	try {
 		if (Object.keys(req.query).length === 0) {
