@@ -25,6 +25,9 @@ app.use(cors());
 app.use(timeout('10s'));
 
 // Routes
+app.use('/site-health', (req, res) => {
+	res.status(200).json({ status: 'OK' });
+});
 app.use('/api/category', categoryRoute);
 app.use('/api/item', itemRoute);
 
