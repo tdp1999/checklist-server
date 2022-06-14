@@ -1,4 +1,7 @@
 // Update with your config settings.
+const parse = require('pg-connection-string').parse;
+const config = parse(process.env.DATABASE_URL);
+config.ssl = { rejectUnauthorized: false };
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -21,7 +24,7 @@ module.exports = {
 	},
 	production: {
 		client: 'pg',
-		connection: process.env.DATABASE_URL + '?ssl=true',
+		connection: config,
 		pool: {
 			min: 2,
 			max: 10,
