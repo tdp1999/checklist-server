@@ -27,11 +27,11 @@ app.use(timeout('10s'));
 
 // Routes
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
 	res.status(200).json({ status: 'First' });
 });
 
-app.use('/site-health', (req, res) => {
+app.get('/site-health', (req, res) => {
 	res.status(200).json({ status: 'OK' });
 });
 app.use('/api/category', categoryRoute);
