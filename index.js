@@ -26,6 +26,11 @@ app.use(cors());
 app.use(timeout('10s'));
 
 // Routes
+
+app.use('/', (req, res) => {
+	res.status(200).json({ status: 'First' });
+});
+
 app.use('/site-health', (req, res) => {
 	res.status(200).json({ status: 'OK' });
 });
