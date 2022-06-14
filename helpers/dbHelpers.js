@@ -1,7 +1,7 @@
 // const knex = require('knex');
 // const config = require('../knexfile');
 // const db = knex(config.development);
-const db = require('../dbconfig');
+const db = require('../dbConfig');
 const { attachPaginate } = require('knex-paginate');
 attachPaginate();
 
