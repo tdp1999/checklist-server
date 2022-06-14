@@ -9,7 +9,7 @@ const categoryRoute = require('./routes/categories.route.pg');
 // const itemRoute = require('./routes/item.route');
 
 // Constant variables:
-const PORT = 8080;
+const PORT = process.env.PORT || 3000;
 
 // Variables
 const app = express();
