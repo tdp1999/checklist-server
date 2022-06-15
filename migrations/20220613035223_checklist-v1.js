@@ -16,8 +16,8 @@ exports.up = async function (knex) {
 		})
 		.createTable('item', (table) => {
 			table.uuid('_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
-			table.string('name').notNullable().unique().index();
-			table.string('slug').notNullable();
+			table.string('name').notNullable();
+			table.string('slug').notNullable().unique().index();
 			table.text('content').notNullable();
 			table.boolean('isDone').notNullable();
 			table.uuid('categoryID').references('_id').inTable('category').onDelete('CASCADE').onUpdate('CASCADE');
