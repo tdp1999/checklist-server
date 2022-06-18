@@ -91,4 +91,14 @@ router.delete('/:id', async (req, res) => {
 	}
 });
 
+// Get calculate category percentage of a category
+// router.get('/:categoryID/calculate', async (req, res) => {
+// 	try {
+// 		const data = await dbHelpers.calculateCompletePercentageOfACategory(req.params.categoryID);
+// 		res.status(200).json(data);
+// 	} catch (error) {
+// 		res.status(404).json({ message: error.message });
+// 	}
+// });
+
 module.exports = router;

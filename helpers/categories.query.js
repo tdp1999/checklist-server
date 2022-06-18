@@ -23,7 +23,7 @@ function retrieveCategoryBySlug(slug) {
 }
 
 function getCategoryWithPagination(perPage, currentPage) {
-	return db('category').paginate({ perPage, currentPage, isLengthAware: true });
+	return db('category').orderBy('_createdAt', 'desc').paginate({ perPage, currentPage, isLengthAware: true });
 }
 
 function createCategory(category) {

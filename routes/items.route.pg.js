@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queryHelper = require('../helpers/items.query');
+const categoryQuery = require('../helpers/categories.query');
 
 // Create a new item
 router.post('/', async (req, res) => {
@@ -24,7 +25,13 @@ router.get('/', async (req, res) => {
 		}
 
 		if (req.query.categoryID) {
-			const data = await queryHelper.retrieveItemByCategory(req.query.categoryID);
+			const data = await queryHelper.getItemsByCategoryID(req.query.categoryID);
+			res.status(200).json(data);
+			return;
+		}
+
+		if (req.query.categorySlug) {
+			const data = await queryHelper.getItemsByCategorySlug(req.query.categorySlug);
 			res.status(200).json(data);
 			return;
 		}
@@ -50,7 +57,7 @@ router.get('/', async (req, res) => {
 		}
 
 		if (Object.keys(req.query).length === 0) {
-			const data = await queryHelper.getAllItem();
+			const data = await queryHelper.getAllItems();
 			res.status(200).json(data);
 			return;
 		}

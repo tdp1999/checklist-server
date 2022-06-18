@@ -1,22 +1,39 @@
 const { db } = require('./dbHelpers');
 
 module.exports = {
-	getAllItem,
+	getAllItems,
 	getItemWithPagination,
 	retrieveItemByID,
 	retrieveItemBySlug,
-	retrieveItemByCategory,
+	getItemsByCategoryID,
 	createItem,
 	updateItemByID,
 	deleteItemByID,
+	getItemsByCategorySlug,
 };
 
-function getAllItem() {
+function getAllItems() {
 	return db('item').orderBy('_createdAt', 'desc');
 }
 
 function getItemWithPagination(perPage, currentPage) {
-	return db('item').paginate({ perPage, currentPage, isLengthAware: true });
+	return db('item')
+		.join('category', 'item.categoryID', 'category._id')
+		.select('item.*', 'category.name as categoryName')
+		.orderBy('_createdAt', 'desc')
+		.paginate({ perPage, currentPage, isLengthAware: true });
+}
+
+function getItemsByCategoryID(categoryID) {
+	return db('item').where('categoryID', categoryID);
+}
+
+function getItemsByCategorySlug(slug) {
+	return db('item')
+		.join('category', 'item.categoryID', 'category._id')
+		.where('category.slug', slug)
+		.select('item.*')
+		.orderBy('_createdAt', 'desc');
 }
 
 function retrieveItemByID(id) {
@@ -27,18 +44,33 @@ function retrieveItemBySlug(slug) {
 	return db('item').where('slug', slug);
 }
 
-function retrieveItemByCategory(categoryID) {
-	return db('item').where('categoryID', categoryID);
+async function createItem(item) {
+	let createdItem = await db('item').insert(item, '*');
+	await calculateCompletePercentageOfACategory(item.categoryID);
+	return createdItem;
 }
 
-function createItem(item) {
-	return db('item').insert(item, '*');
+async function updateItemByID(id, item) {
+	let updatedItem = await db('item').where('_id', id).update(item, '*');
+	let category = await db('item').where('_id', id).select('categoryID');
+	await calculateCompletePercentageOfACategory(category[0].categoryID);
+	return updatedItem;
 }
 
-function updateItemByID(id, item) {
-	return db('item').where('_id', id).update(item, '*');
+async function deleteItemByID(id) {
+	let category = await db('item').where('_id', id).select('categoryID');
+	let deletedItem = await db('item').where('_id', id).del();
+	await calculateCompletePercentageOfACategory(category[0].categoryID);
+	return deletedItem;
 }
 
-function deleteItemByID(id) {
-	return db('item').where('_id', id).del();
+// Calculate complete percentage of a category
+async function calculateCompletePercentageOfACategory(categoryID) {
+	console.log(categoryID);
+	const totalItems = await db('item').where('categoryID', categoryID).count('_id');
+	const completeItems = await db('item').where('categoryID', categoryID).where('isDone', true).count('_id');
+	console.log(totalItems, completeItems);
+	let result = (+completeItems[0].count / +totalItems[0].count) * 100;
+	console.log(result);
+	return db('category').where('_id', categoryID).update({ completePercentage: result }, '*');
 }
