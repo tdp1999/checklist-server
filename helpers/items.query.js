@@ -66,11 +66,8 @@ async function deleteItemByID(id) {
 
 // Calculate complete percentage of a category
 async function calculateCompletePercentageOfACategory(categoryID) {
-	console.log(categoryID);
 	const totalItems = await db('item').where('categoryID', categoryID).count('_id');
 	const completeItems = await db('item').where('categoryID', categoryID).where('isDone', true).count('_id');
-	console.log(totalItems, completeItems);
-	let result = (+completeItems[0].count / +totalItems[0].count) * 100;
-	console.log(result);
+	let result = Math.round((+completeItems[0].count / +totalItems[0].count) * 100);
 	return db('category').where('_id', categoryID).update({ completePercentage: result }, '*');
 }

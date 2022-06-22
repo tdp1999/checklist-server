@@ -23,7 +23,6 @@ router.get('/', async (req, res) => {
 		}
 
 		if (req.query.categoryID) {
-			console.log(req.query.categoryID);
 			const data = await Model.find({ categoryID: req.query.categoryID });
 			res.status(200).json(data);
 			return;
